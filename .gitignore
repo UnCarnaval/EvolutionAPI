@@ -107,6 +107,7 @@ Thumbs.db
 # Evolution API specific
 uploads/
 sessions/
+instances/
 backup.sql
 *.db
 *.sqlite
