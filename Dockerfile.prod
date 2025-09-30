@@ -56,6 +56,7 @@ COPY --from=builder --chown=evolution:nodejs /app/public ./public
 COPY --from=builder --chown=evolution:nodejs /app/runWithProvider.js ./runWithProvider.js
 COPY --from=builder --chown=evolution:nodejs /app/package.json ./package.json
 COPY --from=builder --chown=evolution:nodejs /app/health-check.js ./health-check.js
+COPY --from=builder --chown=evolution:nodejs /app/simple-test.js ./simple-test.js
 
 # Create uploads directory
 RUN mkdir -p uploads sessions && chown -R evolution:nodejs uploads sessions
