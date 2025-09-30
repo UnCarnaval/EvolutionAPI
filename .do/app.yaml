@@ -1,0 +1,64 @@
+name: evolution-api
+services:
+- name: evolution-api
+  source_dir: /
+  github:
+    repo: UnCarnaval/EvolutionAPI
+    branch: main
+  run_command: npm run start:prod
+  environment_slug: node-js
+  instance_count: 1
+  instance_size_slug: basic-xxs
+  http_port: 8080
+  envs:
+  - key: NODE_ENV
+    value: production
+  - key: DATABASE_PROVIDER
+    value: postgresql
+  - key: DATABASE_CONNECTION_URI
+    value: ${db.DATABASE_URL}
+  - key: SERVER_URL
+    value: ${APP_URL}
+  - key: JWT_SECRET
+    value: ${JWT_SECRET}
+  - key: CORS_ORIGIN
+    value: "*"
+  - key: REDIS_ENABLED
+    value: "false"
+  - key: LOG_LEVEL
+    value: INFO
+  - key: WHATSAPP_DEFAULT_ANSWER
+    value: "Hola! Estoy usando Evolution API"
+  - key: WHATSAPP_GROUP_LIMIT
+    value: "256"
+  - key: DATABASE_SAVE_DATA_INSTANCE
+    value: "true"
+  - key: DATABASE_SAVE_DATA_NEW_MESSAGE
+    value: "true"
+  - key: DATABASE_SAVE_MESSAGE_UPDATE
+    value: "true"
+  - key: DATABASE_SAVE_DATA_CONTACTS
+    value: "true"
+  - key: DATABASE_SAVE_DATA_CHATS
+    value: "true"
+  - key: DATABASE_SAVE_DATA_LABELS
+    value: "true"
+  - key: DATABASE_SAVE_DATA_HISTORIC
+    value: "true"
+  - key: DATABASE_SAVE_IS_ON_WHATSAPP
+    value: "true"
+  - key: DATABASE_SAVE_IS_ON_WHATSAPP_DAYS
+    value: "7"
+  - key: DATABASE_DELETE_MESSAGE
+    value: "true"
+  - key: FILE_UPLOAD_MAX_SIZE
+    value: "100MB"
+  - key: FILE_UPLOAD_PATH
+    value: "./uploads"
+
+databases:
+- name: db
+  engine: PG
+  version: "15"
+  size: db-s-1vcpu-1gb
+  num_nodes: 1
