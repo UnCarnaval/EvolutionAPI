@@ -15,10 +15,10 @@ RUN apk add --no-cache \
 WORKDIR /app
 
 # Copy package files
-COPY package*.json ./
+COPY package.json ./
 
-# Install ALL dependencies (including dev dependencies for build)
-RUN npm install --silent
+# Install dependencies with legacy peer deps
+RUN npm install --legacy-peer-deps --silent
 
 # Copy source code
 COPY src ./src
@@ -35,7 +35,7 @@ RUN npx prisma generate --schema ./prisma/postgresql-schema.prisma
 # Build the application
 RUN npm run build
 
-# Remove dev dependencies to reduce image size
+# Remove dev dependencies
 RUN npm prune --production
 
 # Create non-root user
