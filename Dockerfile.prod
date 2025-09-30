@@ -19,6 +19,8 @@ COPY prisma ./prisma
 COPY public ./public
 COPY manager ./manager
 COPY runWithProvider.js ./
+COPY health-check.js ./
+COPY simple-test.js ./
 
 # Generate Prisma client
 RUN npx prisma generate --schema ./prisma/postgresql-schema.prisma
