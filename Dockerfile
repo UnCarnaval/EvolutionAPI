@@ -28,9 +28,7 @@ COPY tsconfig.json ./
 COPY tsup.config.ts ./
 COPY runWithProvider.js ./
 COPY start-simple.js ./
-COPY check-db.js ./
-COPY prisma-production.js ./
-COPY test-db-connection.js ./
+COPY check-env.js ./
 
 # Generate Prisma client
 RUN npx prisma generate --schema ./prisma/postgresql-schema.prisma
