@@ -27,21 +27,39 @@ if (fs.existsSync(distPath)) {
   process.exit(1);
 }
 
-// Ejecutar la aplicación
-console.log('▶️  Ejecutando: npm run start:prod');
+// Ejecutar migraciones primero
+console.log('🗄️  Ejecutando migraciones de base de datos...');
 
 const { spawn } = require('child_process');
-const child = spawn('npm', ['run', 'start:prod'], {
+
+// Ejecutar migraciones
+const migrateChild = spawn('node', ['migrate-db.js'], {
   stdio: 'inherit',
   cwd: process.cwd()
 });
 
-child.on('error', (error) => {
-  console.error('❌ Error al iniciar la aplicación:', error.message);
-  process.exit(1);
-});
+migrateChild.on('exit', (code) => {
+  if (code === 0) {
+    console.log('✅ Migraciones completadas');
+    console.log('▶️  Ejecutando: npm run start:prod');
+    
+    // Ejecutar la aplicación
+    const child = spawn('npm', ['run', 'start:prod'], {
+      stdio: 'inherit',
+      cwd: process.cwd()
+    });
 
-child.on('exit', (code) => {
-  console.log(`📤 Aplicación terminó con código: ${code}`);
-  process.exit(code);
+    child.on('error', (error) => {
+      console.error('❌ Error al iniciar la aplicación:', error.message);
+      process.exit(1);
+    });
+
+    child.on('exit', (code) => {
+      console.log(`📤 Aplicación terminó con código: ${code}`);
+      process.exit(code);
+    });
+  } else {
+    console.error('❌ Error en las migraciones');
+    process.exit(1);
+  }
 });

@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  evolution-api:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      - NODE_ENV=production
+      - DATABASE_PROVIDER=postgresql
+      - DATABASE_CONNECTION_URI=postgresql://postgres:password@postgres:5432/evolution_api
+      - JWT_SECRET=tu-clave-secreta-aqui
+      - CORS_ORIGIN=*
+      - REDIS_ENABLED=false
+      - LOG_LEVEL=INFO
+      - WHATSAPP_DEFAULT_ANSWER=Hola! Estoy usando Evolution API
+      - WHATSAPP_GROUP_LIMIT=256
+    depends_on:
+      - postgres
+    restart: always
+
+  postgres:
+    image: postgres:15
+    environment:
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=evolution_api
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    restart: always
+
+volumes:
+  postgres_data:
