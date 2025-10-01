@@ -19,22 +19,39 @@ if (fs.existsSync(distPath)) {
   console.log('❌ Build NO encontrado');
 }
 
-// Ejecutar la aplicación
-console.log('▶️  Ejecutando: npm run start:prod');
+// Probar conexión a la base de datos primero
+console.log('🔍 Probando conexión a la base de datos...');
 
 const { spawn } = require('child_process');
 
-const child = spawn('npm', ['run', 'start:prod'], {
+// Ejecutar prueba de conexión
+const testChild = spawn('node', ['test-db-connection.js'], {
   stdio: 'inherit',
   cwd: process.cwd()
 });
 
-child.on('error', (error) => {
-  console.error('❌ Error al iniciar la aplicación:', error.message);
-  process.exit(1);
-});
+testChild.on('exit', (code) => {
+  if (code === 0) {
+    console.log('✅ Conexión a base de datos exitosa');
+    console.log('▶️  Ejecutando: npm run start:prod');
+    
+    // Ejecutar la aplicación
+    const child = spawn('npm', ['run', 'start:prod'], {
+      stdio: 'inherit',
+      cwd: process.cwd()
+    });
 
-child.on('exit', (code) => {
-  console.log(`📤 Aplicación terminó con código: ${code}`);
-  process.exit(code);
+    child.on('error', (error) => {
+      console.error('❌ Error al iniciar la aplicación:', error.message);
+      process.exit(1);
+    });
+
+    child.on('exit', (code) => {
+      console.log(`📤 Aplicación terminó con código: ${code}`);
+      process.exit(code);
+    });
+  } else {
+    console.error('❌ Error en la conexión a la base de datos');
+    process.exit(1);
+  }
 });
