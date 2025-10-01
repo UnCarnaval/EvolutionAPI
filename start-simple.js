@@ -3,6 +3,7 @@ console.log('📁 Directorio de trabajo:', process.cwd());
 console.log('🔧 Variables de entorno:');
 console.log('- NODE_ENV:', process.env.NODE_ENV || 'development');
 console.log('- DATABASE_PROVIDER:', process.env.DATABASE_PROVIDER || 'not configured');
+console.log('- DATABASE_CONNECTION_URI:', process.env.DATABASE_CONNECTION_URI ? 'CONFIGURADO' : 'NO CONFIGURADO');
 console.log('- PORT:', process.env.PORT || 8080);
 
 // Verificar que el build existe
