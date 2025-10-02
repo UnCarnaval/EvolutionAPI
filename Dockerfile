@@ -43,6 +43,9 @@ RUN addgroup -g 1001 -S nodejs && \
 # Switch to non-root user
 USER evolution
 
+# Set Prisma environment variable to disable prepared statements
+ENV PRISMA_DISABLE_PREPARED_STATEMENTS=true
+
 EXPOSE 8080
 
 # Start using the CommonJS script
