@@ -62,8 +62,9 @@ export default defineConfig({
   sourcemap: false,
   bundle: true,
   // Don't bundle node_modules, keep them external
+  // This regex matches any import that doesn't start with . or / or our aliases
   external: [
-    /^[^.\/]/, // All node_modules packages
+    /^(?!@(api|config|utils|cache|libs|validate|exceptions))[^.\/]/,
   ],
   tsconfig: './tsconfig.json',
   esbuildPlugins: [pathResolverPlugin],
