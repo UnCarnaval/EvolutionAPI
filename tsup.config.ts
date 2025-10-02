@@ -1,4 +1,5 @@
 import { defineConfig } from 'tsup';
+import path from 'path';
 
 export default defineConfig({
   entry: ['src/main.ts'],
@@ -7,10 +8,14 @@ export default defineConfig({
   minify: false,
   splitting: false,
   sourcemap: true,
-  noExternal: [
-    '@prisma/client',
-    'express-async-errors',
-    'reflect-metadata',
-    'class-validator',
-  ],
+  bundle: true,
+  noExternal: [/.*/],
+  esbuildOptions(options) {
+    options.alias = {
+      '@api': path.resolve(__dirname, 'src/api'),
+      '@config': path.resolve(__dirname, 'src/config'),
+      '@utils': path.resolve(__dirname, 'src/utils'),
+      '@middlewares': path.resolve(__dirname, 'src/middlewares'),
+    };
+  },
 });
