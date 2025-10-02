@@ -57,6 +57,8 @@ services:
     value: "100MB"
   - key: FILE_UPLOAD_PATH
     value: "./uploads"
+  - key: AUTHENTICATION_EXPOSE_IN_FETCH_INSTANCES
+    value: "true"
 
 databases:
 - name: db
