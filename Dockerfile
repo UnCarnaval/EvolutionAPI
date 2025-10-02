@@ -17,7 +17,7 @@ COPY start-simple.js ./
 COPY check-env.js ./
 COPY migrate-db.js ./
 
-# Install ALL dependencies (needed for build)
+# Install ALL dependencies with legacy peer deps
 RUN npm install --legacy-peer-deps --silent
 
 # Generate Prisma client
@@ -32,8 +32,8 @@ RUN if [ ! -d "dist" ]; then \
       echo 'console.log("Evolution API - Build fallback");' > dist/index.js; \
     fi
 
-# Remove dev dependencies
-RUN npm prune --production
+# Remove dev dependencies (with legacy peer deps)
+RUN npm prune --production --legacy-peer-deps
 
 # Create non-root user
 RUN addgroup -g 1001 -S nodejs && \
