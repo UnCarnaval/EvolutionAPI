@@ -17,30 +17,37 @@ const pathResolverPlugin: Plugin = {
     };
 
     Object.entries(aliases).forEach(([alias, aliasPath]) => {
-      const filter = new RegExp(`^${alias.replace('/', '\\/')}`);
+      const filter = new RegExp(`^${alias.replace('/', '\\/')}(/|$)`);
       
       build.onResolve({ filter }, (args) => {
+        // Only handle our aliases, not node_modules packages that start with @
+        if (args.importer && args.importer.includes('node_modules')) {
+          return null; // Let esbuild handle it
+        }
+        
         const modulePath = args.path.replace(alias, aliasPath);
         
         // Try different extensions and index files
-        // IMPORTANT: Check index files BEFORE checking if it's a directory
         const possiblePaths = [
           modulePath + '.ts',
           modulePath + '.js',
-          path.join(modulePath, 'index.router.ts'), // Check index.router.ts first
+          path.join(modulePath, 'index.router.ts'),
           path.join(modulePath, 'index.ts'),
           path.join(modulePath, 'index.js'),
-          modulePath,
         ];
         
         for (const possiblePath of possiblePaths) {
-          if (fs.existsSync(possiblePath) && fs.statSync(possiblePath).isFile()) {
-            return { path: possiblePath };
+          try {
+            if (fs.existsSync(possiblePath) && fs.statSync(possiblePath).isFile()) {
+              return { path: possiblePath };
+            }
+          } catch (e) {
+            // Continue to next path
           }
         }
         
-        // If nothing found, return the original path and let esbuild handle it
-        return { path: modulePath };
+        // If nothing found, return null and let esbuild handle it
+        return null;
       });
     });
   },
@@ -54,7 +61,10 @@ export default defineConfig({
   splitting: false,
   sourcemap: false,
   bundle: true,
-  noExternal: [/.*/],
+  // Don't bundle node_modules, keep them external
+  external: [
+    /^[^.\/]/, // All node_modules packages
+  ],
   tsconfig: './tsconfig.json',
   esbuildPlugins: [pathResolverPlugin],
 });
