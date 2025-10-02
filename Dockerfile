@@ -14,31 +14,26 @@ RUN apk add --no-cache \
 # Set working directory
 WORKDIR /app
 
-# Copy package files
-COPY package.json ./
+# Copy package files first
+COPY package*.json ./
+COPY tsconfig.json ./
+COPY tsup.config.ts ./
 
-# Install dependencies with legacy peer deps
-RUN npm install --legacy-peer-deps --silent
+# Install dependencies
+RUN npm install --production --silent
 
-# Copy source code
+# Copy only essential source code
 COPY src ./src
 COPY prisma ./prisma
 COPY public ./public
-COPY tsconfig.json ./
-COPY tsup.config.ts ./
 COPY runWithProvider.js ./
 COPY start-simple.js ./
-COPY check-env.js ./
-COPY migrate-db.js ./
 
 # Generate Prisma client
 RUN npx prisma generate --schema ./prisma/postgresql-schema.prisma
 
 # Build the application
 RUN npm run build
-
-# Remove dev dependencies
-RUN npm prune --production
 
 # Create non-root user
 RUN addgroup -g 1001 -S nodejs
