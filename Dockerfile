@@ -12,6 +12,7 @@ COPY tsup.config.ts ./
 COPY src ./src
 COPY prisma ./prisma
 COPY public ./public
+COPY manager ./manager
 COPY runWithProvider.js ./
 COPY start-simple.js ./
 COPY check-env.js ./
@@ -29,12 +30,8 @@ RUN npm run build || true
 # Verify dist/main exists, if not use our basic main.js
 RUN if [ ! -f "dist/main.js" ]; then \
       mkdir -p dist && \
-      cp src/main.js dist/main.js; \
+      cp src/main.ts dist/main.js; \
     fi
-
-# Create public directories
-RUN mkdir -p public/manager && \
-    echo '<!DOCTYPE html><html><head><title>Evolution API Manager</title></head><body><h1>Evolution API Manager</h1><p>Manager interface will be available soon.</p></body></html>' > public/manager/index.html
 
 # Remove dev dependencies (with legacy peer deps)
 RUN npm prune --production --legacy-peer-deps
@@ -43,7 +40,7 @@ RUN npm prune --production --legacy-peer-deps
 RUN addgroup -g 1001 -S nodejs && \
     adduser -S evolution -u 1001 && \
     mkdir -p uploads sessions && \
-    chown -R evolution:nodejs /app uploads sessions public
+    chown -R evolution:nodejs /app uploads sessions public manager
 
 # Switch to non-root user
 USER evolution
