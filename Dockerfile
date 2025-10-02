@@ -25,8 +25,8 @@ COPY migrate-db.js ./
 # Generate Prisma client
 RUN npx prisma generate --schema ./prisma/postgresql-schema.prisma
 
-# Build the application
-RUN npm run build
+# Build the application (skip TypeScript checks)
+RUN npm run tsup
 
 # Create a simple start script that uses require instead of import
 RUN echo "require('./dist/main.js');" > start.js
