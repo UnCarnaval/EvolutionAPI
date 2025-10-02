@@ -32,11 +32,9 @@ RUN if [ ! -f "dist/main.js" ]; then \
       cp src/main.js dist/main.js; \
     fi
 
-# Create manager directory if it doesn't exist
-RUN mkdir -p public/manager
-
-# Copy manager files if they exist
-COPY manager/dist/* public/manager/ || true
+# Create public directories
+RUN mkdir -p public/manager && \
+    echo '<!DOCTYPE html><html><head><title>Evolution API Manager</title></head><body><h1>Evolution API Manager</h1><p>Manager interface will be available soon.</p></body></html>' > public/manager/index.html
 
 # Remove dev dependencies (with legacy peer deps)
 RUN npm prune --production --legacy-peer-deps
