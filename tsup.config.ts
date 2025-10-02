@@ -23,16 +23,18 @@ const pathResolverPlugin: Plugin = {
         const modulePath = args.path.replace(alias, aliasPath);
         
         // Try different extensions and index files
+        // IMPORTANT: Check index files BEFORE checking if it's a directory
         const possiblePaths = [
           modulePath + '.ts',
           modulePath + '.js',
-          modulePath,
+          path.join(modulePath, 'index.router.ts'), // Check index.router.ts first
           path.join(modulePath, 'index.ts'),
           path.join(modulePath, 'index.js'),
+          modulePath,
         ];
         
         for (const possiblePath of possiblePaths) {
-          if (fs.existsSync(possiblePath)) {
+          if (fs.existsSync(possiblePath) && fs.statSync(possiblePath).isFile()) {
             return { path: possiblePath };
           }
         }
