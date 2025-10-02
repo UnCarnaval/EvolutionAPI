@@ -16,9 +16,13 @@ services:
   - key: DATABASE_PROVIDER
     value: postgresql
   - key: DATABASE_CONNECTION_URI
-    value: ${db.DATABASE_URL}?statement_cache_size=0&pool_timeout=0
+    value: ${db.DATABASE_URL}?pgbouncer=true
   - key: DATABASE_CONNECTION_CLIENT_NAME
     value: evolution-api
+  - key: DATABASE_SYNC_STATE
+    value: "false"
+  - key: PRISMA_DISABLE_PREPARED_STATEMENTS
+    value: "true"
   - key: SERVER_URL
     value: ${APP_URL}
   - key: AUTHENTICATION_API_KEY
