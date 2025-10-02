@@ -20,7 +20,7 @@ services:
   - key: SERVER_URL
     value: ${APP_URL}
   - key: AUTHENTICATION_API_KEY
-    value: B6D47DD4C86E87C91B06
+    value: 429683C4C977415CAAFCCE10F7D57E11
   - key: JWT_SECRET
     value: ${JWT_SECRET}
   - key: CORS_ORIGIN
