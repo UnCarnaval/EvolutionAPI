@@ -25,14 +25,11 @@ COPY migrate-db.js ./
 # Generate Prisma client
 RUN npx prisma generate --schema ./prisma/postgresql-schema.prisma
 
-# Build the application (force build even with TypeScript errors)
-RUN npm run build || true
+# Build the application
+RUN npm run build
 
-# Verify dist/main exists, if not use our basic main.js
-RUN if [ ! -f "dist/main.js" ]; then \
-      mkdir -p dist && \
-      cp src/main.ts dist/main.js; \
-    fi
+# Create a simple start script that uses require instead of import
+RUN echo "require('./dist/main.js');" > start.js
 
 # Remove dev dependencies (with legacy peer deps)
 RUN npm prune --production --legacy-peer-deps
@@ -48,5 +45,5 @@ USER evolution
 
 EXPOSE 8080
 
-# Start the application
-CMD ["node", "dist/main.js"]
+# Start using the CommonJS script
+CMD ["node", "start.js"]
