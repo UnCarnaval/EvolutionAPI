@@ -16,7 +16,7 @@ services:
   - key: DATABASE_PROVIDER
     value: postgresql
   - key: DATABASE_CONNECTION_URI
-    value: ${db.DATABASE_URL}?pgbouncer=true&connection_limit=1
+    value: ${db.DATABASE_URL}?statement_cache_size=0&pool_timeout=0
   - key: DATABASE_CONNECTION_CLIENT_NAME
     value: evolution-api
   - key: SERVER_URL

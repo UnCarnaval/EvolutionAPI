@@ -1,10 +1,12 @@
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["postgresqlExtensions"]
 }
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_CONNECTION_URI")
+  directUrl = env("DATABASE_CONNECTION_URI")
 }
 
 model Chat {
