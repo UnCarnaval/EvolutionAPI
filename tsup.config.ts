@@ -1,20 +1,16 @@
-import { cpSync } from 'node:fs';
-
 import { defineConfig } from 'tsup';
 
 export default defineConfig({
-  entry: ['src'],
-  outDir: 'dist',
+  entry: ['src/main.ts'],
+  format: ['cjs'],
+  clean: true,
+  minify: false,
   splitting: false,
   sourcemap: true,
-  clean: true,
-  minify: true,
-  format: ['cjs', 'esm'],
-  onSuccess: async () => {
-    cpSync('src/utils/translations', 'dist/translations', { recursive: true });
-  },
-  loader: {
-    '.json': 'file',
-    '.yml': 'file',
-  },
+  noExternal: [
+    '@prisma/client',
+    'express-async-errors',
+    'reflect-metadata',
+    'class-validator',
+  ],
 });

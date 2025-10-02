@@ -5,7 +5,8 @@
   "main": "./dist/main.js",
   "type": "commonjs",
   "scripts": {
-    "build": "tsup",
+    "build": "tsup src/main.ts --format cjs --clean",
+"tsup": "tsup src/main.ts --format cjs --clean",
     "start": "tsx ./src/main.ts",
     "start:prod": "node dist/main",
     "dev:server": "tsx watch ./src/main.ts",
