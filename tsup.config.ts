@@ -6,39 +6,40 @@ import fs from 'fs';
 const pathResolverPlugin: Plugin = {
   name: 'path-resolver',
   setup(build) {
-    build.onResolve({ filter: /^@api/ }, (args) => {
-      const newPath = args.path.replace('@api', path.join(__dirname, 'src', 'api'));
-      return { path: newPath + '.ts' };
-    });
-    build.onResolve({ filter: /^@config/ }, (args) => {
-      const newPath = args.path.replace('@config', path.join(__dirname, 'src', 'config'));
-      return { path: newPath + '.ts' };
-    });
-    build.onResolve({ filter: /^@utils/ }, (args) => {
-      const newPath = args.path.replace('@utils', path.join(__dirname, 'src', 'utils'));
-      return { path: newPath + '.ts' };
-    });
-    build.onResolve({ filter: /^@cache/ }, (args) => {
-      const newPath = args.path.replace('@cache', path.join(__dirname, 'src', 'cache'));
-      return { path: newPath + '.ts' };
-    });
-    build.onResolve({ filter: /^@libs/ }, (args) => {
-      const newPath = args.path.replace('@libs', path.join(__dirname, 'src', 'libs'));
-      return { path: newPath + '.ts' };
-    });
-    build.onResolve({ filter: /^@validate/ }, (args) => {
-      const newPath = args.path.replace('@validate', path.join(__dirname, 'src', 'validate'));
-      return { path: newPath + '.ts' };
-    });
-    build.onResolve({ filter: /^@exceptions/ }, (args) => {
-      const newPath = path.join(__dirname, 'src', 'exceptions');
-      // Check if it's a file or directory
-      if (fs.existsSync(newPath + '.ts')) {
-        return { path: newPath + '.ts' };
-      } else if (fs.existsSync(path.join(newPath, 'index.ts'))) {
-        return { path: path.join(newPath, 'index.ts') };
-      }
-      return { path: newPath };
+    const aliases = {
+      '@api': path.join(__dirname, 'src', 'api'),
+      '@config': path.join(__dirname, 'src', 'config'),
+      '@utils': path.join(__dirname, 'src', 'utils'),
+      '@cache': path.join(__dirname, 'src', 'cache'),
+      '@libs': path.join(__dirname, 'src', 'libs'),
+      '@validate': path.join(__dirname, 'src', 'validate'),
+      '@exceptions': path.join(__dirname, 'src', 'exceptions'),
+    };
+
+    Object.entries(aliases).forEach(([alias, aliasPath]) => {
+      const filter = new RegExp(`^${alias.replace('/', '\\/')}`);
+      
+      build.onResolve({ filter }, (args) => {
+        const modulePath = args.path.replace(alias, aliasPath);
+        
+        // Try different extensions and index files
+        const possiblePaths = [
+          modulePath + '.ts',
+          modulePath + '.js',
+          modulePath,
+          path.join(modulePath, 'index.ts'),
+          path.join(modulePath, 'index.js'),
+        ];
+        
+        for (const possiblePath of possiblePaths) {
+          if (fs.existsSync(possiblePath)) {
+            return { path: possiblePath };
+          }
+        }
+        
+        // If nothing found, return the original path and let esbuild handle it
+        return { path: modulePath };
+      });
     });
   },
 };
