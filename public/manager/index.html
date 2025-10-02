@@ -1,85 +1,14 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Evolution API Manager</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-            background: #f5f5f5;
-        }
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        h1 {
-            color: #333;
-            margin-bottom: 20px;
-        }
-        .status {
-            padding: 15px;
-            background: #e8f5e9;
-            border-radius: 4px;
-            margin-bottom: 20px;
-        }
-        .endpoints {
-            background: #f8f9fa;
-            padding: 15px;
-            border-radius: 4px;
-        }
-        .endpoint {
-            margin-bottom: 10px;
-        }
-        .endpoint code {
-            background: #e9ecef;
-            padding: 2px 5px;
-            border-radius: 3px;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1>Evolution API Manager</h1>
-        
-        <div class="status">
-            <h2>Status</h2>
-            <p>✅ API is running</p>
-            <p>📊 Database: <span id="dbStatus">Checking...</span></p>
-        </div>
-
-        <div class="endpoints">
-            <h2>Available Endpoints</h2>
-            <div class="endpoint">
-                <p>• API Root: <code>/</code></p>
-            </div>
-            <div class="endpoint">
-                <p>• Health Check: <code>/api/health</code></p>
-            </div>
-            <div class="endpoint">
-                <p>• Manager Interface: <code>/manager</code></p>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        // Fetch API status
-        fetch('/api/health')
-            .then(response => response.json())
-            .then(data => {
-                document.getElementById('dbStatus').textContent = 
-                    data.database || 'Not configured';
-            })
-            .catch(error => {
-                document.getElementById('dbStatus').textContent = 
-                    'Error connecting to API';
-            });
-    </script>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/png" href="https://evolution-api.com/files/evo/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Evolution Manager</title>
+    <script type="module" crossorigin src="/assets/index-D-oOjDYe.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-CXH2BdD4.css">
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
 </html>
