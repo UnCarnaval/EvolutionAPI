@@ -65,6 +65,8 @@ services:
     value: "./uploads"
   - key: AUTHENTICATION_EXPOSE_IN_FETCH_INSTANCES
     value: "true"
+  - key: CONFIG_SESSION_PHONE_VERSION
+    value: "2.3000.1020885143"
 
 databases:
 - name: db
