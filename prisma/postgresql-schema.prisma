@@ -593,7 +593,7 @@ model Setting {
   readStatus      Boolean   @default(false)
   syncFullHistory Boolean   @default(false)
   createdAt       DateTime? @default(now()) @db.Timestamp(6)
-  updatedAt       DateTime  @db.Timestamp(6)
+  updatedAt       DateTime  @default(now()) @updatedAt @db.Timestamp(6)
   instanceId      String    @unique
   wavoipToken     String?   @db.VarChar(100)
   Instance        Instance  @relation(fields: [instanceId], references: [id], onDelete: Cascade)

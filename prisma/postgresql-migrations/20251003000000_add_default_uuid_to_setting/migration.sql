@@ -7,3 +7,4 @@
 
 -- This is a schema-only change that affects Prisma Client generation
 
+
