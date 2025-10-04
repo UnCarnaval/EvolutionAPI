@@ -584,7 +584,7 @@ model Session {
 }
 
 model Setting {
-  id              String    @id
+  id              String    @id @default(uuid())
   rejectCall      Boolean   @default(false)
   msgCall         String?   @db.VarChar(100)
   groupsIgnore    Boolean   @default(false)
